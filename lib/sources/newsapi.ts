@@ -5,11 +5,11 @@ import type { RawArticle } from "../types";
 const BASE_URL = "https://newsapi.ai/api/v1/article/getArticles";
 
 interface NewsAIArticle {
-  title: { value: string };
-  url: { value: string };
+  title: string;
+  url: string;
   source: { title: string };
-  dateTimePub: { value: string };
-  body?: { value: string };
+  dateTimePub: string;
+  body?: string;
 }
 
 interface NewsAIResponse {
@@ -62,8 +62,8 @@ export async function fetchNewsAPI(
       }
 
       for (const item of data.articles?.results ?? []) {
-        const url = item.url?.value;
-        const title = item.title?.value;
+        const url = item.url;
+        const title = item.title;
         if (!title || !url) continue;
         if (seenUrls.has(url)) continue;
 
@@ -72,8 +72,8 @@ export async function fetchNewsAPI(
           title: title.trim(),
           url,
           source: item.source?.title || "newsapi.ai",
-          publishedAt: item.dateTimePub?.value ?? new Date().toISOString(),
-          contentSnippet: item.body?.value?.slice(0, 500),
+          publishedAt: item.dateTimePub ?? new Date().toISOString(),
+          contentSnippet: item.body?.slice(0, 500),
         });
       }
     } catch (err) {

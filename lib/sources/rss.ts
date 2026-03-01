@@ -3,13 +3,39 @@ import { subHours } from "date-fns";
 import type { RawArticle } from "../types";
 import type { FeedConfig } from "./feeds";
 
+// Standard parser for most feeds
 const parser = new Parser({
   timeout: 10000,
   headers: {
     "User-Agent": "EcomNewsDaily/1.0 (+https://github.com/ecom-news-daily)",
-    Accept: "application/rss+xml, application/xml, text/xml",
+    Accept: "application/rss+xml, application/xml, text/xml, */*",
   },
 });
+
+// Browser-like parser for sites that block bots (Reddit, etc.)
+const browserParser = new Parser({
+  timeout: 10000,
+  xml: { strict: false },
+  headers: {
+    "User-Agent":
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+  },
+});
+
+// Lenient parser for feeds with malformed XML (e.g. CXL)
+const lenientParser = new Parser({
+  timeout: 10000,
+  xml: { strict: false },
+  headers: {
+    "User-Agent": "EcomNewsDaily/1.0 (+https://github.com/ecom-news-daily)",
+    Accept: "application/rss+xml, application/xml, text/xml, */*",
+  },
+});
+
+const BROWSER_AGENT_HOSTS = ["reddit.com", "old.reddit.com"];
+const LENIENT_XML_HOSTS = ["cxl.com"];
 
 export async function fetchRSSFeed(
   feed: FeedConfig,
@@ -18,7 +44,13 @@ export async function fetchRSSFeed(
   const cutoff = subHours(new Date(), maxAgeHours);
 
   try {
-    const result = await parser.parseURL(feed.url);
+    const host = new URL(feed.url).hostname;
+    const activeParser = BROWSER_AGENT_HOSTS.some((h) => host.includes(h))
+      ? browserParser
+      : LENIENT_XML_HOSTS.some((h) => host.includes(h))
+        ? lenientParser
+        : parser;
+    const result = await activeParser.parseURL(feed.url);
     const articles: RawArticle[] = [];
 
     for (const item of result.items) {

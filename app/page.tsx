@@ -11,8 +11,8 @@ async function getDigestData(): Promise<{
   isMock: boolean;
 }> {
   const hasRedis = !!(
-    process.env.UPSTASH_REDIS_REST_URL &&
-    process.env.UPSTASH_REDIS_REST_TOKEN
+    (process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL) &&
+    (process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN)
   );
 
   // Dev mode: show mock data when Redis isn't configured

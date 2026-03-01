@@ -1,11 +1,11 @@
 import { Redis } from "@upstash/redis";
 import type { Article, DailyDigest } from "./types";
 
-// Upstash Redis client - env vars set automatically by Vercel integration
-// UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN
+// Upstash Redis client - supports both Vercel KV naming (KV_REST_API_*)
+// and direct Upstash naming (UPSTASH_REDIS_REST_*)
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+  url: (process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL)!,
+  token: (process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN)!,
 });
 
 const TTL_SECONDS = 30 * 24 * 60 * 60; // 30 days

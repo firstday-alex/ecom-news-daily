@@ -30,66 +30,62 @@ export const RSS_FEEDS: FeedConfig[] = [
     source: "Google News: Regulations",
   },
 
-  // Reddit
+  // Reddit (old.reddit.com is more permissive with non-browser agents)
   {
-    url: "https://www.reddit.com/r/ecommerce/.rss",
+    url: "https://old.reddit.com/r/ecommerce/.rss?limit=25",
     source: "r/ecommerce",
   },
   {
-    url: "https://www.reddit.com/r/supplements/.rss",
+    url: "https://old.reddit.com/r/supplements/.rss?limit=25",
     source: "r/supplements",
   },
   {
-    url: "https://www.reddit.com/r/entrepreneur/.rss",
+    url: "https://old.reddit.com/r/entrepreneur/.rss?limit=25",
     source: "r/entrepreneur",
   },
   {
-    url: "https://www.reddit.com/r/digital_marketing/.rss",
+    url: "https://old.reddit.com/r/digital_marketing/.rss?limit=25",
     source: "r/digital_marketing",
   },
 
   // Shopify
   {
-    url: "https://www.shopify.com/blog/topics/marketing/rss",
+    url: "https://www.shopify.com/blog.atom",
     source: "Shopify Blog",
   },
 
-  // CXL (Conversion XL)
+  // CXL (Conversion XL) — lenient XML parser handles their malformed feed
   {
     url: "https://cxl.com/blog/feed/",
     source: "CXL Blog",
   },
 
-  // Klaviyo
+  // DTC-focused Substacks
   {
-    url: "https://www.klaviyo.com/blog/feed",
-    source: "Klaviyo Blog",
-  },
-
-  // DTC-focused newsletters on Substack
-  {
-    url: "https://niksharmahq.substack.com/feed",
+    url: "https://niksharma.substack.com/feed",
     source: "Nik Sharma",
-  },
-  {
-    url: "https://dtcnewsletter.com/feed/",
-    source: "DTC Newsletter",
   },
   {
     url: "https://creativeos.substack.com/feed",
     source: "Creative OS",
   },
-
-  // Marketing Operators
   {
-    url: "https://marketingoperators.substack.com/feed",
-    source: "Marketing Operators",
+    url: "https://dtcpod.substack.com/feed",
+    source: "DTC Podcast",
   },
 
-  // Contrarian Thinking / DTC focused
+  // Industry blogs
   {
-    url: "https://www.contractornation.com/feed/",
-    source: "DTC Feed",
+    url: "https://www.omnisend.com/blog/feed/",
+    source: "Omnisend Blog",
+  },
+  {
+    url: "https://commonthreadco.com/blogs/coachs-corner.atom",
+    source: "Common Thread Co",
+  },
+  {
+    url: "https://www.postscript.io/blog/feed/",
+    source: "Postscript Blog",
   },
 ];
 

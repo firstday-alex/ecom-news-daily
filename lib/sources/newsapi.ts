@@ -1,20 +1,23 @@
-import { subHours, formatISO } from "date-fns";
+import { subHours, format } from "date-fns";
 import type { RawArticle } from "../types";
 
-const BASE_URL = "https://newsapi.org/v2/everything";
+// newsapi.ai (EventRegistry) — uses UUID-format apiKey
+const BASE_URL = "https://newsapi.ai/api/v1/article/getArticles";
 
-interface NewsAPIArticle {
-  title: string;
-  url: string;
-  source: { name: string };
-  publishedAt: string;
-  description?: string;
+interface NewsAIArticle {
+  title: { value: string };
+  url: { value: string };
+  source: { title: string };
+  dateTimePub: { value: string };
+  body?: { value: string };
 }
 
-interface NewsAPIResponse {
-  status: string;
-  articles: NewsAPIArticle[];
-  message?: string;
+interface NewsAIResponse {
+  articles?: {
+    results: NewsAIArticle[];
+    totalResults?: number;
+  };
+  error?: string;
 }
 
 export async function fetchNewsAPI(
@@ -26,48 +29,55 @@ export async function fetchNewsAPI(
     return { articles: [], errors: ["NEWS_API_KEY not set"] };
   }
 
-  const from = formatISO(subHours(new Date(), maxAgeHours));
+  const dateStart = format(subHours(new Date(), maxAgeHours), "yyyy-MM-dd");
+
   const articles: RawArticle[] = [];
   const errors: string[] = [];
   const seenUrls = new Set<string>();
 
   const fetches = queries.map(async (q) => {
-    const params = new URLSearchParams({
-      q,
-      from,
-      sortBy: "publishedAt",
-      language: "en",
-      pageSize: "20",
+    const body = {
+      action: "getArticles",
+      keyword: q,
+      lang: "eng",
+      dateStart,
+      articlesCount: 25,
+      articlesSortBy: "date",
+      resultType: "articles",
       apiKey,
-    });
+    };
 
     try {
-      const res = await fetch(`${BASE_URL}?${params}`, {
+      const res = await fetch(BASE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
         next: { revalidate: 0 },
       });
-      const data: NewsAPIResponse = await res.json();
+      const data: NewsAIResponse = await res.json();
 
-      if (data.status !== "ok") {
-        errors.push(`NewsAPI "${q}": ${data.message ?? "unknown error"}`);
+      if (data.error) {
+        errors.push(`newsapi.ai "${q}": ${data.error}`);
         return;
       }
 
-      for (const item of data.articles) {
-        if (!item.title || !item.url) continue;
-        if (seenUrls.has(item.url)) continue;
-        if (item.title === "[Removed]") continue;
+      for (const item of data.articles?.results ?? []) {
+        const url = item.url?.value;
+        const title = item.title?.value;
+        if (!title || !url) continue;
+        if (seenUrls.has(url)) continue;
 
-        seenUrls.add(item.url);
+        seenUrls.add(url);
         articles.push({
-          title: item.title.trim(),
-          url: item.url,
-          source: item.source.name || "NewsAPI",
-          publishedAt: item.publishedAt,
-          contentSnippet: item.description?.slice(0, 500),
+          title: title.trim(),
+          url,
+          source: item.source?.title || "newsapi.ai",
+          publishedAt: item.dateTimePub?.value ?? new Date().toISOString(),
+          contentSnippet: item.body?.value?.slice(0, 500),
         });
       }
     } catch (err) {
-      errors.push(`NewsAPI "${q}": ${String(err)}`);
+      errors.push(`newsapi.ai "${q}": ${String(err)}`);
     }
   });
 

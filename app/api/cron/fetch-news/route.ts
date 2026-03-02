@@ -4,6 +4,7 @@ import { RSS_FEEDS, NEWS_API_QUERIES, BING_QUERIES } from "@/lib/sources/feeds";
 import { fetchAllRSSFeeds } from "@/lib/sources/rss";
 import { fetchNewsAPI } from "@/lib/sources/newsapi";
 import { fetchBingNews } from "@/lib/sources/bing";
+import { fetchXAccounts, X_ACCOUNTS } from "@/lib/sources/twitter";
 import { processArticles } from "@/lib/claude";
 import { getSeenIds, markSeen, mergeArticles } from "@/lib/kv";
 import type { RawArticle, CronResult } from "@/lib/types";
@@ -37,13 +38,14 @@ export async function GET(req: NextRequest) {
   console.log(`[Cron] Starting fetch for ${today}`);
 
   // Fetch from all sources in parallel
-  const [rssResult, newsApiResult, bingResult] = await Promise.all([
+  const [rssResult, newsApiResult, bingResult, xResult] = await Promise.all([
     fetchAllRSSFeeds(RSS_FEEDS, 25),
     fetchNewsAPI(NEWS_API_QUERIES, 25),
     fetchBingNews(BING_QUERIES),
+    fetchXAccounts(X_ACCOUNTS, 25),
   ]);
 
-  allErrors.push(...rssResult.errors, ...newsApiResult.errors, ...bingResult.errors);
+  allErrors.push(...rssResult.errors, ...newsApiResult.errors, ...bingResult.errors, ...xResult.errors);
 
   // Combine and deduplicate by URL
   const allRaw: RawArticle[] = [];
@@ -53,6 +55,7 @@ export async function GET(req: NextRequest) {
     ...rssResult.articles,
     ...newsApiResult.articles,
     ...bingResult.articles,
+    ...xResult.articles,
   ]) {
     if (!seenUrls.has(article.url)) {
       seenUrls.add(article.url);

@@ -30,24 +30,6 @@ export const RSS_FEEDS: FeedConfig[] = [
     source: "Google News: Regulations",
   },
 
-  // Reddit (old.reddit.com is more permissive with non-browser agents)
-  {
-    url: "https://old.reddit.com/r/ecommerce/.rss?limit=25",
-    source: "r/ecommerce",
-  },
-  {
-    url: "https://old.reddit.com/r/supplements/.rss?limit=25",
-    source: "r/supplements",
-  },
-  {
-    url: "https://old.reddit.com/r/entrepreneur/.rss?limit=25",
-    source: "r/entrepreneur",
-  },
-  {
-    url: "https://old.reddit.com/r/digital_marketing/.rss?limit=25",
-    source: "r/digital_marketing",
-  },
-
   // Shopify
   {
     url: "https://www.shopify.com/blog.atom",
@@ -60,28 +42,38 @@ export const RSS_FEEDS: FeedConfig[] = [
     source: "CXL Blog",
   },
 
-  // DTC-focused Substacks
-  {
-    url: "https://niksharma.substack.com/feed",
-    source: "Nik Sharma",
-  },
-  {
-    url: "https://creativeos.substack.com/feed",
-    source: "Creative OS",
-  },
-  {
-    url: "https://dtcpod.substack.com/feed",
-    source: "DTC Podcast",
-  },
-
-  // Industry blogs
-  {
-    url: "https://www.omnisend.com/blog/feed/",
-    source: "Omnisend Blog",
-  },
+  // Agency & operator blogs
   {
     url: "https://commonthreadco.com/blogs/coachs-corner.atom",
     source: "Common Thread Co",
+  },
+  {
+    url: "https://smartmarketer.com/feed/",
+    source: "Smart Marketer",
+  },
+
+  // Marketing & CRO publications
+  {
+    url: "https://www.practicalecommerce.com/feed",
+    source: "Practical Ecommerce",
+  },
+  {
+    url: "https://www.ecommercefuel.com/feed/",
+    source: "eCommerceFuel",
+  },
+  {
+    url: "https://baymard.com/blog/atom",
+    source: "Baymard Institute",
+  },
+  {
+    url: "https://vwo.com/blog/feed/",
+    source: "VWO Blog",
+  },
+
+  // Email & SMS marketing platforms
+  {
+    url: "https://www.omnisend.com/blog/feed/",
+    source: "Omnisend Blog",
   },
   {
     url: "https://www.postscript.io/blog/feed/",

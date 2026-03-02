@@ -12,7 +12,7 @@ const parser = new Parser({
   },
 });
 
-// Browser-like parser for sites that block bots (Reddit, etc.)
+// Browser-like parser for sites that block bots
 const browserParser = new Parser({
   timeout: 10000,
   xml: { strict: false },
@@ -34,7 +34,7 @@ const lenientParser = new Parser({
   },
 });
 
-const BROWSER_AGENT_HOSTS = ["reddit.com", "old.reddit.com"];
+const BROWSER_AGENT_HOSTS: string[] = [];
 const LENIENT_XML_HOSTS = ["cxl.com"];
 
 export async function fetchRSSFeed(

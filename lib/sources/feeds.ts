@@ -52,6 +52,32 @@ export const RSS_FEEDS: FeedConfig[] = [
     source: "Smart Marketer",
   },
 
+  // Marketing news & industry coverage
+  {
+    url: "https://www.adweek.com/feed/",
+    source: "Adweek",
+  },
+  {
+    url: "https://digiday.com/feed/",
+    source: "Digiday",
+  },
+  {
+    url: "https://www.modernretail.co/feed/",
+    source: "Modern Retail",
+  },
+  {
+    url: "https://www.retaildive.com/feeds/news/",
+    source: "Retail Dive",
+  },
+  {
+    url: "https://www.glossy.co/feed/",
+    source: "Glossy",
+  },
+  {
+    url: "https://2pml.com/feed/",
+    source: "2PM",
+  },
+
   // Marketing & CRO publications
   {
     url: "https://www.practicalecommerce.com/feed",
@@ -69,8 +95,28 @@ export const RSS_FEEDS: FeedConfig[] = [
     url: "https://vwo.com/blog/feed/",
     source: "VWO Blog",
   },
+  {
+    url: "https://contentmarketinginstitute.com/feed/",
+    source: "CMI",
+  },
+  {
+    url: "https://moz.com/blog/feed",
+    source: "Moz Blog",
+  },
+  {
+    url: "https://www.searchenginejournal.com/feed/",
+    source: "Search Engine Journal",
+  },
 
-  // Email & SMS marketing platforms
+  // Email marketing
+  {
+    url: "https://www.klaviyo.com/blog/feed",
+    source: "Klaviyo Blog",
+  },
+  {
+    url: "https://www.litmus.com/blog/feed/",
+    source: "Litmus Blog",
+  },
   {
     url: "https://www.omnisend.com/blog/feed/",
     source: "Omnisend Blog",

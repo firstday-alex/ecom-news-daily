@@ -31,7 +31,6 @@ export const X_ACCOUNTS: XAccount[] = [
 
 const parser = new Parser({
   timeout: 8000,
-  xml: { strict: false },
   headers: {
     "User-Agent":
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",

@@ -23,7 +23,11 @@ export async function getLatestDate(): Promise<string | null> {
 }
 
 export async function getDigest(date: string): Promise<DailyDigest | null> {
-  return redis.get<DailyDigest>(digestKey(date));
+  const digest = await redis.get<DailyDigest>(digestKey(date));
+  if (!digest) return null;
+  // Strip any Reddit articles that were stored before the source was removed
+  const articles = digest.articles.filter((a) => !a.source.startsWith("r/"));
+  return { ...digest, articles, articleCount: articles.length };
 }
 
 export async function saveDigest(digest: DailyDigest): Promise<void> {

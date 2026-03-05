@@ -1,16 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type { Article, Category } from "@/lib/types";
 import { ALL_CATEGORIES } from "@/lib/types";
 import { ArticleCard } from "./ArticleCard";
 
 interface CategoryFilterProps {
   articles: Article[];
+  date: string;
 }
 
-export function CategoryFilter({ articles }: CategoryFilterProps) {
+export function CategoryFilter({ articles: initialArticles, date }: CategoryFilterProps) {
   const [active, setActive] = useState<Category | "All">("All");
+  const [articles, setArticles] = useState(initialArticles);
+
+  const handleDelete = useCallback(
+    async (id: string) => {
+      const res = await fetch(`/api/articles/${id}?date=${date}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setArticles((prev) => prev.filter((a) => a.id !== id));
+      }
+    },
+    [date]
+  );
 
   const filtered =
     active === "All"
@@ -65,7 +79,7 @@ export function CategoryFilter({ articles }: CategoryFilterProps) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filtered.map((article) => (
-            <ArticleCard key={article.id} article={article} />
+            <ArticleCard key={article.id} article={article} onDelete={handleDelete} />
           ))}
         </div>
       )}

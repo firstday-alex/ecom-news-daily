@@ -78,7 +78,7 @@ export default async function HomePage() {
         </div>
       )}
 
-      <CategoryFilter articles={digest.articles} />
+      <CategoryFilter articles={digest.articles} date={digest.date} />
     </div>
   );
 }

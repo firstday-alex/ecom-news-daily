@@ -59,7 +59,7 @@ export default async function DatePage({ params }: PageProps) {
         </div>
       )}
 
-      <CategoryFilter articles={digest.articles} />
+      <CategoryFilter articles={digest.articles} date={digest.date} />
     </div>
   );
 }
